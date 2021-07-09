@@ -1,6 +1,7 @@
 import 'package:e_connect_app/pages/bottom_navigator_page.dart';
 import 'package:e_connect_app/pages/home_page.dart';
 import 'package:e_connect_app/pages/login_page.dart';
+import 'package:e_connect_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,12 +12,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      // home: LoginPage(),
+      initialRoute: MyRoutes.loginRoute,
+      routes: {
+        '/': (context) => LoginPage(),
+        MyRoutes.homeRoute: (context) => HomePage(),
+        MyRoutes.loginRoute: (context) => LoginPage(),
+
+      }
       // home: HomePage()
       
     );
