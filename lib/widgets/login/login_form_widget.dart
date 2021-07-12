@@ -1,12 +1,14 @@
 import 'package:e_connect_app/api/api_service.dart';
+import 'package:e_connect_app/controllers/login_controller.dart';
 import 'package:e_connect_app/model/login_model.dart';
 import 'package:e_connect_app/utils/routes.dart';
 import 'package:e_connect_app/widgets/checkbox_widget.dart';
 import 'package:e_connect_app/widgets/login/button_login_widget.dart';
-import 'package:e_connect_app/widgets/progess_hud.dart';
+import 'package:e_connect_app/widgets/snack_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 class LoginForm extends StatefulWidget {
   final void Function(bool isLoading) onChangeLoading;
   const LoginForm({Key? key, required this.onChangeLoading}) : super(key: key);
@@ -18,23 +20,34 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   late LoginRequestModel requestModel;
+  late LoginController controller;
+
   String userName = '';
   String passWord = '';
   @override
-  void initState() {
+  void initState () {
     super.initState();
-    requestModel = new LoginRequestModel(email: userName, password: passWord);
+    requestModel = new LoginRequestModel(phoneNumber: userName, password: passWord);
+    controller = Get.put(LoginController());
+    userName = controller.phoneNumber;
   }
 
   void moveToHome(BuildContext context) async {
+    GetStorage box = GetStorage();
     if (isValidForm()) {
       _formKey.currentState!.save();
       widget.onChangeLoading(true);
       APIService apiService = new APIService();
       apiService.login(requestModel).then((value) => {
             widget.onChangeLoading(false),
-            if (value.token!.isNotEmpty)
-              {Navigator.pushNamed(context, MyRoutes.homeRoute)}
+            if (value.message != null) {
+              {showSnackBar(context, value.message)}
+            } else if (value.access_token != null) {
+               Navigator.pushNamed(context, MyRoutes.homeRoute),
+               controller.updateInformation(phoneNumber: userName),
+               box.write('access_token', value.access_token)
+            }
+            
           });
     }
   }
@@ -76,6 +89,7 @@ class _LoginFormState extends State<LoginForm> {
                             letterSpacing: .6,
                             fontSize: 25),
                       ),
+                      Text(controller.phoneNumber),
                       TextFormField(
                         initialValue: userName,
                         autocorrect: false,
@@ -92,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
                           });
                         },
                         onSaved: (input) => {
-                          if (input!.isNotEmpty) {requestModel.email = input}
+                          if (input!.isNotEmpty) {requestModel.phoneNumber = input}
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {

@@ -1,16 +1,22 @@
+import 'package:e_connect_app/controllers/auto_login_controller.dart';
 import 'package:e_connect_app/pages/bottom_navigator_page.dart';
 import 'package:e_connect_app/pages/home_page.dart';
 import 'package:e_connect_app/pages/login_page.dart';
 import 'package:e_connect_app/utils/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+     final controller = Get.put(AutoLoginController());
+     print("page ${controller.isLogin}");
     return MaterialApp(
       title: '',
       theme: ThemeData(
@@ -18,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: LoginPage(),
-      initialRoute: MyRoutes.loginRoute,
+      initialRoute: controller.currentPage,
       routes: {
         '/': (context) => LoginPage(),
         MyRoutes.homeRoute: (context) => HomePage(),

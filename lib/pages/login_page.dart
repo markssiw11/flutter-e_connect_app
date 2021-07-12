@@ -1,4 +1,3 @@
-import 'package:e_connect_app/widgets/checkbox_widget.dart';
 import 'package:e_connect_app/widgets/login/login_form_widget.dart';
 import 'package:e_connect_app/widgets/login/login_title_widget.dart';
 import 'package:e_connect_app/widgets/progess_hud.dart';
