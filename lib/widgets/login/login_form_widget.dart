@@ -1,5 +1,5 @@
 import 'package:e_connect_app/api/api_service.dart';
-import 'package:e_connect_app/controllers/login_controller.dart';
+import 'package:e_connect_app/controllers/auto_login_controller.dart';
 import 'package:e_connect_app/model/login_model.dart';
 import 'package:e_connect_app/utils/routes.dart';
 import 'package:e_connect_app/widgets/checkbox_widget.dart';
@@ -8,7 +8,6 @@ import 'package:e_connect_app/widgets/snack_bar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 class LoginForm extends StatefulWidget {
   final void Function(bool isLoading) onChangeLoading;
   const LoginForm({Key? key, required this.onChangeLoading}) : super(key: key);
@@ -20,20 +19,26 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   late LoginRequestModel requestModel;
-  late LoginController controller;
+  late AutoLoginController controller;
 
   String userName = '';
   String passWord = '';
+  bool isChecked = false;
+  void onCheck(bool value) {
+    setState(() {
+      isChecked = value;
+    });
+  }
   @override
   void initState () {
     super.initState();
     requestModel = new LoginRequestModel(phoneNumber: userName, password: passWord);
-    controller = Get.put(LoginController());
-    userName = controller.phoneNumber;
+    controller = Get.put(AutoLoginController());
+    userName = controller.getUserName;
+    isChecked= controller.getRemember;
   }
 
   void moveToHome(BuildContext context) async {
-    GetStorage box = GetStorage();
     if (isValidForm()) {
       _formKey.currentState!.save();
       widget.onChangeLoading(true);
@@ -44,8 +49,8 @@ class _LoginFormState extends State<LoginForm> {
               {showSnackBar(context, value.message)}
             } else if (value.access_token != null) {
                Navigator.pushNamed(context, MyRoutes.homeRoute),
-               controller.updateInformation(phoneNumber: userName),
-               box.write('access_token', value.access_token)
+               controller.setUserName(userName),
+               controller.setRemember(isChecked),
             }
             
           });
@@ -89,7 +94,6 @@ class _LoginFormState extends State<LoginForm> {
                             letterSpacing: .6,
                             fontSize: 25),
                       ),
-                      Text(controller.phoneNumber),
                       TextFormField(
                         initialValue: userName,
                         autocorrect: false,
@@ -146,7 +150,7 @@ class _LoginFormState extends State<LoginForm> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CheckBoxWidget(title: 'Rememberme'),
+                          CheckBoxWidget(title: 'Rememberme', isCheck: isChecked, onChange: onCheck),
                           Text(
                             "Forgot password?",
                             style: TextStyle(

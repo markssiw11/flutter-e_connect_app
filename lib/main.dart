@@ -1,5 +1,5 @@
+import 'package:e_connect_app/api/api_service.dart';
 import 'package:e_connect_app/controllers/auto_login_controller.dart';
-import 'package:e_connect_app/pages/bottom_navigator_page.dart';
 import 'package:e_connect_app/pages/home_page.dart';
 import 'package:e_connect_app/pages/login_page.dart';
 import 'package:e_connect_app/utils/routes.dart';
@@ -15,66 +15,53 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     final controller = Get.put(AutoLoginController());
-     print("page ${controller.isLogin}");
-    return MaterialApp(
-      title: '',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      debugShowCheckedModeBanner: false,
-      // home: LoginPage(),
-      initialRoute: controller.currentPage,
-      routes: {
-        '/': (context) => LoginPage(),
-        MyRoutes.homeRoute: (context) => HomePage(),
-        MyRoutes.loginRoute: (context) => LoginPage(),
-
-      }
-      // home: HomePage()
-      
-    );
+    return App();
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _AppState createState() => _AppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int currentIndex = 0;
-  // TabController controller=TabController(length: 2, vsync: this);
-
-  void setCurrentIndex( int index) {
-    setState(() {
-      currentIndex = index;
-    });
+class _AppState extends State<App> {
+  late AutoLoginController controller;
+  String? refreshToken;
+  String initPage = MyRoutes.loginRoute;
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(AutoLoginController());
+    refreshToken = controller.getRefreshToken ?? null;
+    initPage = controller.currentPage;
+    if (refreshToken != null && controller.isLogin) {
+      APIService apiService = new APIService();
+      print('refresh token $refreshToken');
+      apiService.refreshToken(refreshToken).then((value) => {
+            if (value != '0')
+              {
+                controller.logout(),
+                initPage = MyRoutes.loginRoute
+              }
+          });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-       
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times: $currentIndex',
-            ),
-          ],
+    return MaterialApp(
+        title: '',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
-      ),
-      bottomNavigationBar: bottomNavigatorPage(setCurrentIndex, currentIndex), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        debugShowCheckedModeBanner: false,
+        initialRoute: controller.currentPage,
+        routes: {
+          '/': (context) => LoginPage(),
+          MyRoutes.homeRoute: (context) => HomePage(),
+          MyRoutes.loginRoute: (context) => LoginPage(),
+        });
   }
 }

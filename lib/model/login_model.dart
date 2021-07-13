@@ -4,10 +4,9 @@ class LoginRequestModel {
   String phoneNumber;
   String password;
   LoginRequestModel({
-     required this.phoneNumber,
-     required this.password,
+    required this.phoneNumber,
+    required this.password,
   });
-  
 
   LoginRequestModel copyWith({
     String? phoneNumber,
@@ -35,31 +34,32 @@ class LoginRequestModel {
 
   String toJson() => json.encode(toMap());
 
-  factory LoginRequestModel.fromJson(String source) => LoginRequestModel.fromMap(json.decode(source));
+  factory LoginRequestModel.fromJson(String source) =>
+      LoginRequestModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'LoginRequestModel(phoneNumber: $phoneNumber, password: $password)';
+  String toString() =>
+      'LoginRequestModel(phoneNumber: $phoneNumber, password: $password)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is LoginRequestModel &&
-      other.phoneNumber == phoneNumber &&
-      other.password == password;
+        other.phoneNumber == phoneNumber &&
+        other.password == password;
   }
 
   @override
   int get hashCode => phoneNumber.hashCode ^ password.hashCode;
 }
 
-
 class LoginResponseModel {
   String? access_token;
   String? expired_time;
   int? expires_in;
   String? refresh_token;
-  ProfileUserItem ? profileUser;
+  ProfileUserItem? profileUser;
   String? name;
   String? message;
   LoginResponseModel({
@@ -72,13 +72,12 @@ class LoginResponseModel {
     this.message,
   });
 
-
   LoginResponseModel copyWith({
     String? access_token,
     String? expired_time,
     int? expires_in,
     String? refresh_token,
-    ProfileUserItem ? profileUser,
+    ProfileUserItem? profileUser,
     String? name,
     String? message,
   }) {
@@ -111,7 +110,7 @@ class LoginResponseModel {
       expired_time: map['expired_time'],
       expires_in: map['expires_in'],
       refresh_token: map['refresh_token'],
-      profileUser: ProfileUserItem .fromMap(map['profileUser']),
+      profileUser: ProfileUserItem.fromMap(map['profileUser']),
       name: map['name'],
       message: map['message'],
     );
@@ -119,7 +118,8 @@ class LoginResponseModel {
 
   String toJson() => json.encode(toMap());
 
-  factory LoginResponseModel.fromJson(String source) => LoginResponseModel.fromMap(json.decode(source));
+  factory LoginResponseModel.fromJson(String source) =>
+      LoginResponseModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -129,47 +129,48 @@ class LoginResponseModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is LoginResponseModel &&
-      other.access_token == access_token &&
-      other.expired_time == expired_time &&
-      other.expires_in == expires_in &&
-      other.refresh_token == refresh_token &&
-      other.profileUser == profileUser &&
-      other.name == name &&
-      other.message == message;
+        other.access_token == access_token &&
+        other.expired_time == expired_time &&
+        other.expires_in == expires_in &&
+        other.refresh_token == refresh_token &&
+        other.profileUser == profileUser &&
+        other.name == name &&
+        other.message == message;
   }
 
   @override
   int get hashCode {
     return access_token.hashCode ^
-      expired_time.hashCode ^
-      expires_in.hashCode ^
-      refresh_token.hashCode ^
-      profileUser.hashCode ^
-      name.hashCode ^
-      message.hashCode;
+        expired_time.hashCode ^
+        expires_in.hashCode ^
+        refresh_token.hashCode ^
+        profileUser.hashCode ^
+        name.hashCode ^
+        message.hashCode;
   }
 }
 
 class ProfileUserItem {
   final String id;
-  final String firstName;
-  final String lastName;
-  final String birthDay;
-  final String phoneNumber;
-  final String email;
-  final String province;
-  final String district;
+  String? firstName;
+  String? lastName;
+  String? birthDay;
+  String? phoneNumber;
+  String? email;
+  String? province;
+  String? district;
+
   ProfileUserItem({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.birthDay,
+    this.firstName,
+    this.lastName,
+    this.birthDay,
     required this.phoneNumber,
-    required this.email,
-    required this.province,
-    required this.district,
+    this.email,
+    this.province,
+    this.district,
   });
 
   ProfileUserItem copyWith({
@@ -222,7 +223,8 @@ class ProfileUserItem {
 
   String toJson() => json.encode(toMap());
 
-  factory ProfileUserItem.fromJson(String source) => ProfileUserItem.fromMap(json.decode(source));
+  factory ProfileUserItem.fromJson(String source) =>
+      ProfileUserItem.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -232,31 +234,30 @@ class ProfileUserItem {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is ProfileUserItem &&
-      other.id == id &&
-      other.firstName == firstName &&
-      other.lastName == lastName &&
-      other.birthDay == birthDay &&
-      other.phoneNumber == phoneNumber &&
-      other.email == email &&
-      other.province == province &&
-      other.district == district;
+        other.id == id &&
+        other.firstName == firstName &&
+        other.lastName == lastName &&
+        other.birthDay == birthDay &&
+        other.phoneNumber == phoneNumber &&
+        other.email == email &&
+        other.province == province &&
+        other.district == district;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      firstName.hashCode ^
-      lastName.hashCode ^
-      birthDay.hashCode ^
-      phoneNumber.hashCode ^
-      email.hashCode ^
-      province.hashCode ^
-      district.hashCode;
+        firstName.hashCode ^
+        lastName.hashCode ^
+        birthDay.hashCode ^
+        phoneNumber.hashCode ^
+        email.hashCode ^
+        province.hashCode ^
+        district.hashCode;
   }
 }
-
 
 class LoginResponseFailModel {
   String? name;
@@ -292,7 +293,8 @@ class LoginResponseFailModel {
 
   String toJson() => json.encode(toMap());
 
-  factory LoginResponseFailModel.fromJson(String source) => LoginResponseFailModel.fromMap(json.decode(source));
+  factory LoginResponseFailModel.fromJson(String source) =>
+      LoginResponseFailModel.fromMap(json.decode(source));
 
   @override
   String toString() => 'LoginResponseFailModel(name: $name, message: $message)';
@@ -300,12 +302,101 @@ class LoginResponseFailModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is LoginResponseFailModel &&
+        other.name == name &&
+        other.message == message;
+  }
+
+  @override
+  int get hashCode => name.hashCode ^ message.hashCode;
+}
+
+class RefreshTokenResponse {
+  String? access_token;
+  String? expired_time;
+  int? expires_in;
+  String? refresh_token;
+  String? name;
+  String? message;
+  RefreshTokenResponse({
+    this.access_token,
+    this.expired_time,
+    this.expires_in,
+    this.refresh_token,
+    this.name,
+    this.message,
+  });
+
+  RefreshTokenResponse copyWith({
+    String? access_token,
+    String? expired_time,
+    int? expires_in,
+    String? refresh_token,
+    String? name,
+    String? message,
+  }) {
+    return RefreshTokenResponse(
+      access_token: access_token ?? this.access_token,
+      expired_time: expired_time ?? this.expired_time,
+      expires_in: expires_in ?? this.expires_in,
+      refresh_token: refresh_token ?? this.refresh_token,
+      name: name ?? this.name,
+      message: message ?? this.message,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'access_token': access_token,
+      'expired_time': expired_time,
+      'expires_in': expires_in,
+      'refresh_token': refresh_token,
+      'name': name,
+      'message': message,
+    };
+  }
+
+  factory RefreshTokenResponse.fromMap(Map<String, dynamic> map) {
+    return RefreshTokenResponse(
+      access_token: map['access_token'],
+      expired_time: map['expired_time'],
+      expires_in: map['expires_in'],
+      refresh_token: map['refresh_token'],
+      name: map['name'],
+      message: map['message'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory RefreshTokenResponse.fromJson(String source) => RefreshTokenResponse.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'RefreshTokenResponse(access_token: $access_token, expired_time: $expired_time, expires_in: $expires_in, refresh_token: $refresh_token, name: $name, message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+  
+    return other is RefreshTokenResponse &&
+      other.access_token == access_token &&
+      other.expired_time == expired_time &&
+      other.expires_in == expires_in &&
+      other.refresh_token == refresh_token &&
       other.name == name &&
       other.message == message;
   }
 
   @override
-  int get hashCode => name.hashCode ^ message.hashCode;
+  int get hashCode {
+    return access_token.hashCode ^
+      expired_time.hashCode ^
+      expires_in.hashCode ^
+      refresh_token.hashCode ^
+      name.hashCode ^
+      message.hashCode;
+  }
 }
